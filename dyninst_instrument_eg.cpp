@@ -102,12 +102,49 @@ void insert_before_CALL(BPatch_addressSpace* app) {
                 fprintf(stderr, "insertSnippet before call failed\n");
                 exit(-1);
             }
-            ;
         }
     }
 
 }
 
+void insert_at_FUNC_ENTRY(BPatch_addressSpace* app)
+{
+    BPatch_image* appImage = app->getImage();
+    
+    
+    std::vector<BPatch_function *> funcs;
+    BPatch_function *func;
+    std::set<BPatch_basicBlock *> blks;
+    BPatch_basicBlock *blk;
+    BPatch_flowGraph *cfg;
+    
+    appImage->findFunction("do_nothing", funcs);
+    if(funcs.size() != 1)
+    {
+        cout<<"can't find function:do_nothing"<<endl;
+        exit(-1);
+    }
+    func = funcs[0];
+    cfg = func->getCFG();
+
+    std::vector<BPatch_point *> points;
+    func->getEntryPoints(points);
+
+    std::vector<BPatch_snippet*> printfArgs;
+    BPatch_snippet* fmt = new BPatch_constExpr("inserted at func entry\n");
+    printfArgs.push_back(fmt);
+    std::vector<BPatch_function*> printfFuncs;
+    appImage->findFunction("printf", printfFuncs);
+    if (printfFuncs.size() == 0) {
+        fprintf(stderr, "Could not find printf\n");
+        exit(-1);
+    }
+    BPatch_funcCallExpr printfCall(*(printfFuncs[0]), printfArgs);
+    if ( !app->insertSnippet(printfCall,points) ) {
+        fprintf(stderr, "insertSnippet before call failed\n");
+        exit(-1);
+    }
+}
 
 void finishInstrumenting(BPatch_addressSpace* app, const char* newName)
 {
@@ -143,6 +180,7 @@ int main() {
         exit(1);
     }
     insert_before_CALL(app);
+    insert_at_FUNC_ENTRY(app);
 
     // Finish instrumentation
     const char* progName2 = "donothing-rewritten";
