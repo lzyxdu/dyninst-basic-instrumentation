@@ -3,7 +3,7 @@
 * mutatee is from https://github.com/TheAlgorithms/C/blob/master/audio/alaw.c
 # Prerequisite
 * Download and build dyninst (v10.2.1). 
-* Edit AIO.sh or env_setup.sh to set the path to dyninst build dir.
+* Edit AIO.sh, env_setup.sh, and Makefile.inc to set the path to dyninst build dir.
 # Usage
 Simply run
 ```
