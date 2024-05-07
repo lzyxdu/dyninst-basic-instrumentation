@@ -98,7 +98,7 @@ void advanced_instrumentation(BPatch_addressSpace* app)
     {
         BPatch_function *func = fit;
 
-        // skip linker added functions (TODO)
+        // skip linker-added functions
         string func_name = func->getName();
         if(is_linker_added_func(func->getName()))
         {
@@ -167,7 +167,7 @@ void advanced_instrumentation(BPatch_addressSpace* app)
     }
 }
 
-void finishInstrumenting(BPatch_addressSpace* app, const char* newName)
+void finishInstrumentation(BPatch_addressSpace* app, const char* newName)
 {
     BPatch_binaryEdit* appBin = dynamic_cast<BPatch_binaryEdit*>(app);
     if (appBin) 
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 
     // Finish instrumentation
     string progName2 = progName + "-rewritten";
-    finishInstrumenting(app, progName2.c_str());
+    finishInstrumentation(app, progName2.c_str());
 
     printf("instrumentation finished\n");
 
