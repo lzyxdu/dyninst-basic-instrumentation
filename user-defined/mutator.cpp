@@ -55,7 +55,7 @@ BPatch_function *findFunc(BPatch_image *image, const char *name)
 
 bool is_linker_added_func(string func_name)
 {
-    // TODO : func_name[0] == '_' might be wrong
+    // TODO : ad-hoc assumption
     if(func_name[0] == '_' || func_name == "deregister_tm_clones" || func_name == "register_tm_clones" || func_name == "frame_dummy")
     {
         return true;
